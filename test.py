@@ -1,5 +1,4 @@
 import yaml
-
 import matplotlib.pyplot as plt
 
 # 自定義構建元組的方法
