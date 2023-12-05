@@ -170,10 +170,9 @@ class Population:
         #compete
         newPop=[]        
         for index1,index2 in zip(indexList1,indexList2):
-            cmpval=self.population[index1].compareRankAndCrowding(self.population[index2])
-            if cmpval == 1:
+            if index1 < index2:
                 newPop.append(copy.deepcopy(self.population[index1]))
-            elif cmpval == -1:
+            elif index1 > index2:
                 newPop.append(copy.deepcopy(self.population[index2]))
             else:
                 rn=self.uniprng.random()
@@ -185,22 +184,7 @@ class Population:
         # overwrite old pop with newPop (i.e., the selected pop)   
         self.population=newPop
     
-    def MOTruncation(self,newpopsize):
-        
-        #First, sort by non-domination rank
-        self.population.sort(key=attrgetter('frontRank'),reverse=False)
-        maxfrontRank=self.population[-1].frontRank
-
-        #sort by crowding distance if they have same frontRank
-        total_length=0
-        for i in range(maxfrontRank):
-            same_front_list=[]
-            for ind in self.population:
-                if ind.frontRank == i: same_front_list.append(ind)
-            same_front_list.sort(key=attrgetter('crowdDist'),reverse=True)  # Higher is better
-            self.population[total_length:total_length+len(same_front_list)] = same_front_list
-            total_length += len(same_front_list)
-            
+    def truncation(self,newpopsize):
         self.population=self.population[:newpopsize]
         
     def updateRanking(self):
@@ -252,7 +236,8 @@ class Population:
             plt.show()
         
     def sort(self):
-        self.population.sort(key=lambda ind: (-ind.objectives["isArrive"], ind.objectives["step"]))
+        self.population.sort(key=lambda ind: (-ind.objectives["step"]))
+        # self.population.sort(key=lambda ind: (-ind.objectives["isArrive"], -ind.objectives["step"]))
                 
     def __str__(self):
         s=''

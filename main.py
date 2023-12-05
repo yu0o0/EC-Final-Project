@@ -89,7 +89,7 @@ def printStats(pop,gen):
         # if ind.objectives[1] > maxval:
         #     costval,maxval=ind.objectives
         #     mutRate=ind.mutRate
-        print(f'{ind.objectives["isArrive"]} {ind.objectives["step"]}')
+        print(f'{ind} {ind.objectives["isArrive"]} {ind.objectives["step"]}')
 
     # print('Max Damage',maxval)
     # print('Most powerful Spell Cost',costval)
@@ -147,7 +147,7 @@ def EV3(cfg):
     with open(cfg.map, "r") as yaml_file:
         maze_map = yaml.safe_load(yaml_file)
     print(maze_map)
-    plotMaze(maze_map)
+    # plotMaze(maze_map)
 
     #start random number generators
     uniprng=Random()
@@ -196,15 +196,16 @@ def EV3(cfg):
         population.combinePops(offspring)
 
         #Obejectives are changed, so remeber to update the ranking before turcation occurs.
-        population.updateRanking()
+        # population.updateRanking()
+        population.sort()
 
         #population.truncateSelect(cfg.populationSize)
-        population.MOTruncation(cfg.populationSize)
+        population.truncation(cfg.populationSize)
         
         #print population stats    
         printStats(population,i+1)
         #print the objective space with its frontRank
-        population.generatePlots(title=f'Generation {i+1}')
+        # population.generatePlots(title=f'Generation {i+1}')
 
 
         

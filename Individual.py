@@ -123,11 +123,11 @@ class MagicianIndividual(Individual):
         
         for i in range(self.nRounds):
             if self.uniprng.random() < self.mutRate:
-                self.state[i]=self.uniprng.randint(0,self.nSpells-1)
+                self.state[i]=self.uniprng.choice(['E', 'N', 'S', 'W'])
         
         self.objectives=None
             
     def __str__(self):
-        return str(self.state)+'\t' + '\t'+'%0.8e'%self.mutRate +'\t'+ 'Costs: '+ str(self.objectives[0]) +'\t''Damage:'+ str(self.objectives[1]) + '\t' + 'crowdDist: '+'%0.8e'%self.crowdDist + ' frontRank: '+str(self.frontRank)
+        return str(self.state)+'\t'
 
 

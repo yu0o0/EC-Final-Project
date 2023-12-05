@@ -6,6 +6,7 @@ import time
 #
 class MagicPower:
     mazeMap=None
+    act = ['N', 'E', 'S', 'W']
         
     @classmethod  
     def ObjFuct(cls,state):
@@ -13,24 +14,46 @@ class MagicPower:
         goal = (1, 1)   
         step = 0
         isArrive = False
-        for action in state:
+        visited = set()
+        for action in state:   
             # 撞牆
             if cls.mazeMap[start][action] == 0:
                 break
-            
-            step += 1
             if action == 'N':
-                start = (start[0]-1, start[1])   
+                tempStart = (start[0]-1, start[1])   
             elif action == 'S':
-                start = (start[0]+1, start[1])   
+                tempStart = (start[0]+1, start[1])   
             elif action == 'W':
-                start = (start[0], start[1]-1)   
+                tempStart = (start[0], start[1]-1)   
             elif action == 'E':
-                start = (start[0], start[1]+1)   
+                tempStart = (start[0], start[1]+1)   
                 
             # 到達終點
-            if start == goal:
+            if tempStart == goal:
                 isArrive = True
+                break
+            
+            if tempStart in visited:
+                if cls.act.index(action) == 3:
+                    action = cls.act[0]
+                else:
+                    action = cls.act[cls.act.index(action)+1]
+                if cls.mazeMap[start][action] == 0:
+                    break
+                if action == 'N':
+                    start = (start[0]-1, start[1])   
+                elif action == 'S':
+                    start = (start[0]+1, start[1])   
+                elif action == 'W':
+                    start = (start[0], start[1]-1)   
+                elif action == 'E':
+                    start = (start[0], start[1]+1)
+                # break
+            else:
+                start = tempStart
+            step += 1
+            visited.add(start)
+            
             
         return {"isArrive": isArrive,"step": step}
         
