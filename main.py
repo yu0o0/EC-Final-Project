@@ -114,9 +114,10 @@ def initClassVars(cfg):
     Population.individualType=MagicianIndividual
 
 
-def plotMaze(maze_map, pop=None, stay=False):
+def plotMaze(maze_map, generation, pop=None, stay=False):
     # 設定繪圖大小
     # plt.figure(figsize=(11, 11))
+    plt.title(f'generation: {generation}')
 
     # 繪製迷宮格子
     for pos, walls in maze_map.items():
@@ -136,15 +137,16 @@ def plotMaze(maze_map, pop=None, stay=False):
     # plt.axis('off')
 
     if pop:
-        # 將路徑畫在迷宮上
-        print(pop[0].path)
-        path_x = [x + 0.5 for x, y in pop[0].path]
-        path_y = [y + 0.5 for x, y in pop[0].path]
-        plt.plot(path_y, path_x, marker='o', color='red', markersize=6)
+        for i in range(len(pop)):
+            # 將路徑畫在迷宮上
+            print(pop[i].path)
+            path_x = [x + 0.5 for x, y in pop[i].path]
+            path_y = [y + 0.5 for x, y in pop[i].path]
+            plt.plot(path_y, path_x, marker='o', color='red', markersize=6)
 
     # 顯示繪圖
     if not stay:
-        plt.pause(2)     #畫面停止時間
+        plt.pause(0.2)     # 程式停止時間
         plt.clf() 
     else:
         plt.ioff()
@@ -186,7 +188,7 @@ def EV3(cfg):
 
     #print initial pop stats    
     printStats(population,0)
-    # plotMaze(maze_map, population, False)
+    plotMaze(maze_map, 0, population, False)
 
 
     #evolution main loop
@@ -221,11 +223,8 @@ def EV3(cfg):
         
         #print population stats    
         printStats(population,i+1)
-        # plotMaze(maze_map, population, False)
-        #print the objective space with its frontRank
-        # population.generatePlots(title=f'Generation {i+1}')
-
-
+        plotMaze(maze_map, i+1, population, False)
+        
         
         
 #
