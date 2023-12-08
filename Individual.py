@@ -19,7 +19,7 @@ class Individual:
     ObjFunc=None
 
     def __init__(self):
-        self.objectives=self.__class__.ObjFunc(self.state)
+        self.objectives, self.path=self.__class__.ObjFunc(self.state)
         self.mutRate=self.uniprng.uniform(0.9,0.1) #use "normalized" sigma
         self.numObj=len(self.objectives)
             
@@ -29,7 +29,7 @@ class Individual:
         if self.mutRate > self.maxMutRate: self.mutRate=self.maxMutRate
             
     def evaluateObjectives(self):
-        if self.objectives == None: self.objectives=self.__class__.ObjFunc(self.state)
+        if self.objectives == None: self.objectives, self.path=self.__class__.ObjFunc(self.state)
     
     def dominates(self,other):
         dominatesCount=0

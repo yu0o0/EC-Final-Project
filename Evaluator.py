@@ -14,7 +14,9 @@ class MagicPower:
         goal = (1, 1)   
         step = 0
         isArrive = False
-        visited = set()
+        # visited = set()
+        visited = []
+        visited.append(start)
         for action in state:   
             # 撞牆
             if cls.mazeMap[start][action] == 0:
@@ -31,8 +33,10 @@ class MagicPower:
             # 到達終點
             if tempStart == goal:
                 isArrive = True
+                visited.append(goal)
                 break
             
+            # 檢查有無回頭
             if tempStart in visited:
                 if cls.act.index(action) == 3:
                     action = cls.act[0]
@@ -52,9 +56,9 @@ class MagicPower:
             else:
                 start = tempStart
             step += 1
-            visited.add(start)
+            visited.append(start)
             
             
-        return {"isArrive": isArrive,"step": step}
+        return {"isArrive": isArrive,"step": step}, visited
         
 

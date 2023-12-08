@@ -89,7 +89,8 @@ def printStats(pop,gen):
         # if ind.objectives[1] > maxval:
         #     costval,maxval=ind.objectives
         #     mutRate=ind.mutRate
-        print(f'{ind} {ind.objectives["isArrive"]} {ind.objectives["step"]}')
+        # print(f'{ind} {ind.objectives["isArrive"]} {ind.objectives["step"]}')
+        print(f'{ind.objectives["isArrive"]} {ind.objectives["step"]}')
 
     # print('Max Damage',maxval)
     # print('Most powerful Spell Cost',costval)
@@ -113,9 +114,9 @@ def initClassVars(cfg):
     Population.individualType=MagicianIndividual
 
 
-def plotMaze(maze_map):
+def plotMaze(maze_map, pop=None, stay=False):
     # 設定繪圖大小
-    plt.figure(figsize=(11, 11))
+    # plt.figure(figsize=(11, 11))
 
     # 繪製迷宮格子
     for pos, walls in maze_map.items():
@@ -134,20 +135,35 @@ def plotMaze(maze_map):
     plt.gca().invert_yaxis()
     # plt.axis('off')
 
+    if pop:
+        # 將路徑畫在迷宮上
+        print(pop[0].path)
+        path_x = [x + 0.5 for x, y in pop[0].path]
+        path_y = [y + 0.5 for x, y in pop[0].path]
+        plt.plot(path_y, path_x, marker='o', color='red', markersize=6)
+
     # 顯示繪圖
-    plt.show()
+    if not stay:
+        plt.pause(2)     #畫面停止時間
+        plt.clf() 
+    else:
+        plt.ioff()
+        plt.show()
 
 
 #EV3_MO:
 #            
 def EV3(cfg):
+    plt.ion() #開啟interactive mode 成功的關鍵函式
+    plt.figure(figsize=(11, 11))
+
     # 將自定義構建方法添加到 SafeLoader
     yaml.SafeLoader.add_constructor('tag:yaml.org,2002:python/tuple', lambda loader, node: tuple(loader.construct_sequence(node)))
     # 載入 YAML 檔案
     with open(cfg.map, "r") as yaml_file:
         maze_map = yaml.safe_load(yaml_file)
     print(maze_map)
-    # plotMaze(maze_map)
+    # plotMaze(maze_map, False)
 
     #start random number generators
     uniprng=Random()
@@ -170,7 +186,8 @@ def EV3(cfg):
 
     #print initial pop stats    
     printStats(population,0)
-    # population.generatePlots(title=f'Generation 0')
+    plotMaze(maze_map, population, False)
+
 
     #evolution main loop
     for i in range(cfg.generationCount):
@@ -204,6 +221,7 @@ def EV3(cfg):
         
         #print population stats    
         printStats(population,i+1)
+        plotMaze(maze_map, population, False)
         #print the objective space with its frontRank
         # population.generatePlots(title=f'Generation {i+1}')
 
