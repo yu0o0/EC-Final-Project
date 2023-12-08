@@ -186,7 +186,7 @@ def EV3(cfg):
 
     #print initial pop stats    
     printStats(population,0)
-    plotMaze(maze_map, population, False)
+    # plotMaze(maze_map, population, False)
 
 
     #evolution main loop
@@ -221,7 +221,7 @@ def EV3(cfg):
         
         #print population stats    
         printStats(population,i+1)
-        plotMaze(maze_map, population, False)
+        # plotMaze(maze_map, population, False)
         #print the objective space with its frontRank
         # population.generatePlots(title=f'Generation {i+1}')
 
