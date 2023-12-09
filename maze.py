@@ -1,8 +1,8 @@
 from pyamaze import maze
 import yaml
 
-m=maze(10,10)
-m.CreateMaze(10,10,loopPercent=3)
+m=maze(50,50)
+m.CreateMaze(10,10,loopPercent=6)
 # m.run()
 print(m.maze_map)
 

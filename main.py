@@ -18,11 +18,10 @@ import yaml
 import math
 import time
 from random import Random
-import matplotlib
-import matplotlib.pyplot as plt
 from Population import *
 from Evaluator import *
-matplotlib.use('TkAgg')
+from Plot import *
+# matplotlib.use('TkAgg')
 
 
 
@@ -114,60 +113,22 @@ def initClassVars(cfg):
     if len(cfg.EnhanceDamage) != cfg.magicTypes: raise Exception('Inconsistent EnhanceDamage matrix size')
     Population.individualType=MagicianIndividual
 
-
-def plotMaze(maze_map, generation, pop=None, stay=False):
-    # 設定繪圖大小
-    # plt.figure(figsize=(11, 11))
-    plt.title(f'generation: {generation}')
-
-    # 繪製迷宮格子
-    for pos, walls in maze_map.items():
-        y, x = pos
-        # 畫出每個格子的四面牆壁
-        if not walls['N']:
-            plt.plot([x, x + 1], [y, y], 'k-')
-        if not walls['S']:
-            plt.plot([x, x + 1], [y+1, y+1], 'k-')
-        if not walls['E']:
-            plt.plot([x + 1, x + 1], [y, y + 1], 'k-')
-        if not walls['W']:
-            plt.plot([x, x], [y, y + 1], 'k-')
-
-    # 美化繪圖
-    plt.gca().invert_yaxis()
-    # plt.axis('off')
-
-    if pop:
-        for i in range(len(pop)):
-            # 將路徑畫在迷宮上
-            # print(pop[i].path)
-            path_x = [x + 0.5 for x, y in pop[i].path]
-            path_y = [y + 0.5 for x, y in pop[i].path]
-            plt.plot(path_y, path_x, marker='o', color='red', markersize=6)
-
-    # 顯示繪圖
-    if not stay:
-        # plt.waitforbuttonpress()  # 等待用戶按下鍵盤或滑鼠按鈕
-        plt.pause(0.2)     # 程式停止時間
-        plt.clf() 
-    else:
-        plt.ioff()
-        plt.show()
-
-
 #EV3_MO:
 #            
 def EV3(cfg):
-    plt.ion() #開啟interactive mode 成功的關鍵函式
-    plt.figure(figsize=(11, 11))
-
     # 將自定義構建方法添加到 SafeLoader
     yaml.SafeLoader.add_constructor('tag:yaml.org,2002:python/tuple', lambda loader, node: tuple(loader.construct_sequence(node)))
     # 載入 YAML 檔案
     with open(cfg.map, "r") as yaml_file:
         maze_map = yaml.safe_load(yaml_file)
     print(maze_map)
-    # plotMaze(maze_map, False)
+    max_x = max(coord[1] for coord in maze_map.keys())
+    max_y = max(coord[0] for coord in maze_map.keys())
+
+    # 迷宮的大小
+    maze_size = (max_y, max_x)
+    Plot(maze_size)
+    Plot.plotMaze(maze_map)
 
     #start random number generators
     uniprng=Random()
@@ -190,7 +151,7 @@ def EV3(cfg):
 
     #print initial pop stats    
     printStats(population,0)
-    plotMaze(maze_map, 0, population, False)
+    Plot.plotPath(0, population, False)
 
 
     #evolution main loop
@@ -225,9 +186,9 @@ def EV3(cfg):
         
         #print population stats    
         printStats(population,i+1)
-        plotMaze(maze_map, i+1, population, False)
+        Plot.plotPath(i+1, population, False)
 
-    plotMaze(maze_map, cfg.generationCount, population, True)
+    # plotPath(maze_map, cfg.generationCount, population, True)
         
         
 #
