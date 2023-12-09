@@ -18,10 +18,11 @@ import yaml
 import math
 import time
 from random import Random
+import matplotlib
 import matplotlib.pyplot as plt
 from Population import *
 from Evaluator import *
-
+matplotlib.use('TkAgg')
 
 
 
@@ -139,13 +140,14 @@ def plotMaze(maze_map, generation, pop=None, stay=False):
     if pop:
         for i in range(len(pop)):
             # 將路徑畫在迷宮上
-            print(pop[i].path)
+            # print(pop[i].path)
             path_x = [x + 0.5 for x, y in pop[i].path]
             path_y = [y + 0.5 for x, y in pop[i].path]
             plt.plot(path_y, path_x, marker='o', color='red', markersize=6)
 
     # 顯示繪圖
     if not stay:
+        # plt.waitforbuttonpress()  # 等待用戶按下鍵盤或滑鼠按鈕
         plt.pause(0.2)     # 程式停止時間
         plt.clf() 
     else:
@@ -224,7 +226,8 @@ def EV3(cfg):
         #print population stats    
         printStats(population,i+1)
         plotMaze(maze_map, i+1, population, False)
-        
+
+    plotMaze(maze_map, cfg.generationCount, population, True)
         
         
 #
