@@ -1,6 +1,6 @@
 import yaml
 import matplotlib.pyplot as plt
-
+ 
 # 自定義構建元組的方法
 def tuple_constructor(loader, node):
     return tuple(loader.construct_sequence(node))
