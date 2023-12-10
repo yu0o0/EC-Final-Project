@@ -95,10 +95,6 @@ class Individual:
     
 
 class MagicianIndividual(Individual):
-    """
-    Magic World
-    """
-    nSpells=None
     nRounds=None
     def __init__(self):
         self.state=[]

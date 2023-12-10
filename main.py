@@ -104,7 +104,7 @@ def printStats(pop,gen):
 #  variables on our Pool worker processes
 #
 def initClassVars(cfg):
-    MagicianIndividual.ObjFunc=MagicPower.ObjFuct
+    MagicianIndividual.ObjFunc=ExploreMaze.ObjFuct
     MagicianIndividual.nRounds=cfg.rounds
     MagicianIndividual.nSpells=cfg.magicTypes
     MagicianIndividual.learningRate=1.0/math.sqrt(cfg.rounds)
@@ -126,7 +126,7 @@ def EV3(cfg):
     max_y = max(coord[0] for coord in maze_map.keys())
 
     # 迷宮的大小
-    maze_size = (max_y, max_x)
+    maze_size = (max_y+1, max_x+1)
     Plot(maze_size)
     Plot.plotMaze(maze_map)
 
@@ -142,7 +142,8 @@ def EV3(cfg):
     Individual.normprng=normprng
     Population.uniprng=uniprng
     Population.crossoverFraction=cfg.crossoverFraction
-    MagicPower.mazeMap=maze_map
+    ExploreMaze.mazeMap=maze_map
+    ExploreMaze.goal = (max_y, max_x)
     initClassVars(cfg)
 
     #create initial Population (random initialization)
