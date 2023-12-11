@@ -89,8 +89,7 @@ def printStats(pop,gen):
         # if ind.objectives[1] > maxval:
         #     costval,maxval=ind.objectives
         #     mutRate=ind.mutRate
-        # print(f'{ind} {ind.objectives["isArrive"]} {ind.objectives["step"]}')
-        print(f'{ind.objectives["isArrive"]} {ind.objectives["step"]}')
+        print(f'{ind} {ind.objectives["isArrive"]} {ind.objectives["isArrive2"]} {ind.objectives["step"]}')
 
     # print('Max Damage',maxval)
     # print('Most powerful Spell Cost',costval)
@@ -108,7 +107,7 @@ def initClassVars(cfg):
     MagicianIndividual.nRounds=cfg.rounds
     MagicianIndividual.nSpells=cfg.magicTypes
     MagicianIndividual.learningRate=1.0/math.sqrt(cfg.rounds)
-
+    
     if len(cfg.selfDamage) != cfg.magicTypes: raise Exception('Inconsistent selfDamage vector length')
     if len(cfg.EnhanceDamage) != cfg.magicTypes: raise Exception('Inconsistent EnhanceDamage matrix size')
     Population.individualType=MagicianIndividual
