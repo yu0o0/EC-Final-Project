@@ -10,12 +10,14 @@ class MagicPower:
         
     @classmethod  
     def ObjFuct(cls,state):
-        start = (10, 10)  
-        goal = (1, 1)   
+        start = (10, 10)
+        goal = (1, 1)
+        goal2 = (10,10)
         step = 0
         isArrive = False
+        isArrive2 = False
         visited = set()
-        for action in state:   
+        for action in state:
             # 撞牆
             if cls.mazeMap[start][action] == 0:
                 break
@@ -31,7 +33,12 @@ class MagicPower:
             # 到達終點
             if tempStart == goal:
                 isArrive = True
-                break
+                start = (1, 1)
+                visited = set()
+            elif isArrive == True:
+                if tempStart == goal2:
+                        isArrive2 = True
+                        break
             
             if tempStart in visited:
                 if cls.act.index(action) == 3:
@@ -49,12 +56,11 @@ class MagicPower:
                 elif action == 'E':
                     start = (start[0], start[1]+1)
                 # break
+
             else:
                 start = tempStart
             step += 1
             visited.add(start)
-            
-            
-        return {"isArrive": isArrive,"step": step}
-        
 
+        return {"isArrive": isArrive,"isArrive2": isArrive2,"step": step}
+    

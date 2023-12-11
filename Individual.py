@@ -17,6 +17,7 @@ class Individual:
     uniprng=None
     normprng=None
     ObjFunc=None
+    ObjFunc2=None
 
     def __init__(self):
         self.objectives=self.__class__.ObjFunc(self.state)

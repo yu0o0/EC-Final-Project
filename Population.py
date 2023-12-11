@@ -236,8 +236,8 @@ class Population:
             plt.show()
         
     def sort(self):
-        self.population.sort(key=lambda ind: (-ind.objectives["step"]))
-        # self.population.sort(key=lambda ind: (-ind.objectives["isArrive"], -ind.objectives["step"]))
+        #self.population.sort(key=lambda ind: (-ind.objectives["step"]))
+        self.population.sort(key=lambda ind: (-ind.objectives["isArrive"], -ind.objectives["step"]))
                 
     def __str__(self):
         s=''
