@@ -18,10 +18,10 @@ import yaml
 import math
 import time
 from random import Random
-import matplotlib.pyplot as plt
 from Population import *
 from Evaluator import *
-
+from Plot import *
+# matplotlib.use('TkAgg')
 
 
 
@@ -112,31 +112,6 @@ def initClassVars(cfg):
     if len(cfg.EnhanceDamage) != cfg.magicTypes: raise Exception('Inconsistent EnhanceDamage matrix size')
     Population.individualType=MagicianIndividual
 
-def plotMaze(maze_map):
-    # 設定繪圖大小
-    plt.figure(figsize=(11, 11))
-
-    # 繪製迷宮格子
-    for pos, walls in maze_map.items():
-        y, x = pos
-        # 畫出每個格子的四面牆壁
-        if not walls['N']:
-            plt.plot([x, x + 1], [y, y], 'k-')
-        if not walls['S']:
-            plt.plot([x, x + 1], [y+1, y+1], 'k-')
-        if not walls['E']:
-            plt.plot([x + 1, x + 1], [y, y + 1], 'k-')
-        if not walls['W']:
-            plt.plot([x, x], [y, y + 1], 'k-')
-
-    # 美化繪圖
-    plt.gca().invert_yaxis()
-    # plt.axis('off')
-
-    # 顯示繪圖
-    plt.show()
-
-
 #EV3_MO:
 #            
 def EV3(cfg):
@@ -146,7 +121,13 @@ def EV3(cfg):
     with open(cfg.map, "r") as yaml_file:
         maze_map = yaml.safe_load(yaml_file)
     print(maze_map)
-    # plotMaze(maze_map)
+    max_x = max(coord[1] for coord in maze_map.keys())
+    max_y = max(coord[0] for coord in maze_map.keys())
+
+    # 迷宮的大小
+    maze_size = (max_y, max_x)
+    Plot(maze_size)
+    Plot.plotMaze(maze_map)
 
     #start random number generators
     uniprng=Random()
@@ -169,7 +150,8 @@ def EV3(cfg):
 
     #print initial pop stats    
     printStats(population,0)
-    # population.generatePlots(title=f'Generation 0')
+    Plot.plotPath(0, population, False)
+
 
     #evolution main loop
     for i in range(cfg.generationCount):
@@ -203,10 +185,9 @@ def EV3(cfg):
         
         #print population stats    
         printStats(population,i+1)
-        #print the objective space with its frontRank
-        # population.generatePlots(title=f'Generation {i+1}')
+        Plot.plotPath(i+1, population, False)
 
-
+    # plotPath(maze_map, cfg.generationCount, population, True)
         
         
 #
