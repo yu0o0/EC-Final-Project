@@ -236,8 +236,29 @@ class Population:
             plt.show()
         
     def sort(self):
+        unique_paths = set()
+        uniquePop = []
+        repetitivePop = []
+
+        for ind in self.population:
+            path_tuple = tuple(ind.path)
+            if path_tuple in unique_paths:
+                # 如果路徑已經在 unique_paths 中，表示重複，放到 duplicated_paths 中
+                repetitivePop.append(ind)
+            else:
+                # 否則，將路徑加入 unique_paths
+                unique_paths.add(path_tuple)
+                uniquePop.append(ind)
+
+        # print("Excellent Paths:", uniquePop)
+        # print("Inferior Paths:", repetitivePop)
+        uniquePop.sort(key=lambda ind: (-ind.objectives["isArrive"], -ind.objectives["step"]))
+        repetitivePop.sort(key=lambda ind: (-ind.objectives["isArrive"], -ind.objectives["step"]))
+        uniquePop.extend(repetitivePop)
+        self.population = uniquePop.copy()
+
         # self.population.sort(key=lambda ind: (-ind.objectives["step"]))
-        self.population.sort(key=lambda ind: (-ind.objectives["isArrive"], -ind.objectives["step"]))
+        # self.population.sort(key=lambda ind: (-ind.objectives["isArrive"], -ind.objectives["step"]))
                 
     def __str__(self):
         s=''

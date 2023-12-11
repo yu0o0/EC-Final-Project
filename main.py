@@ -189,7 +189,7 @@ def EV3(cfg):
         printStats(population,i+1)
         Plot.plotPath(i+1, population, False)
 
-    # plotPath(maze_map, cfg.generationCount, population, True)
+    plotPath(maze_map, cfg.generationCount, population, True)
         
         
 #

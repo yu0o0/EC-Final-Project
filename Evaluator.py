@@ -18,15 +18,14 @@ class ExploreMaze:
         
         visited = []
         visited.append(position)
+        firstStep = False
         end_flag = False
+
         for i,direction in enumerate(state):  
             while 1:
                 # 撞牆
                 if cls.mazeMap[position][direction] == 0:
-                    # 下個方向沒路 且 不是左右轉
-                    if not ( cls.mazeMap[position][state[i+1]]==1 \
-                        and abs(cls.directions.index(state[i])-cls.directions.index(state[i+1]))==1 ):
-                        end_flag = True
+                    end_flag = True
                     break
 
                 if direction == 'N':
@@ -48,6 +47,14 @@ class ExploreMaze:
                     break
                 
                 position = tempPosition
+                available_directions = [direction for direction, road in cls.mazeMap[position].items() if road == 1]
+                # 有別條路能走
+                if len(available_directions) > 2 or (not direction in available_directions):
+                    # 下個方向沒路 或 回頭
+                    # print(position,available_directions,state[i],state[i+1])
+                    if abs(cls.directions.index(state[i])-cls.directions.index(state[i+1]))==2:
+                        end_flag = True
+                    break
 
             if end_flag:
                 break
