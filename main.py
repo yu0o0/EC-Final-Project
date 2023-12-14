@@ -89,7 +89,8 @@ def printStats(pop,gen):
         # if ind.objectives[1] > maxval:
         #     costval,maxval=ind.objectives
         #     mutRate=ind.mutRate
-        print(f'{ind} {ind.objectives["isArrive"]} {ind.objectives["isArrive2"]} {ind.objectives["step"]}')
+        print(f'{ind.path} {ind.objectives["isArrive"]} {ind.objectives["isArrive2"]} {ind.objectives["step"]}')
+        break
 
     # print('Max Damage',maxval)
     # print('Most powerful Spell Cost',costval)
@@ -187,7 +188,7 @@ def EV3(cfg):
         printStats(population,i+1)
         Plot.plotPath(i+1, population, False)
 
-    # plotPath(maze_map, cfg.generationCount, population, True)
+    Plot.plotPath(maze_map, cfg.generationCount, population, True)
         
         
 #

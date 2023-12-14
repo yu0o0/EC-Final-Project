@@ -1,6 +1,7 @@
 
 import math
 import time
+import copy
 
 #1-D lattice total energy function evaluator class
 #
@@ -34,12 +35,11 @@ class MagicPower:
             if tempStart == goal:
                 isArrive = True
                 start = (1, 1)
-                first_visited = visited
+                first_visited = copy.deepcopy(visited)
                 visited = list()
             elif isArrive == True:
                 if tempStart == goal2:
                         isArrive2 = True
-                        visited.append(first_visited)
                         break
             
             # 檢查有無回頭
@@ -65,5 +65,6 @@ class MagicPower:
             step += 1
             visited.append(start)
             
-            
+        if isArrive:
+            visited = first_visited + visited
         return {"isArrive": isArrive,"isArrive2": isArrive2,"step": step}, visited 

@@ -27,7 +27,7 @@ class Plot:
         # 顯示繪圖
         if not stay:
             # plt.waitforbuttonpress()  # 等待用戶按下鍵盤或滑鼠按鈕
-            plt.pause(0.2)     # 程式停止時間
+            plt.pause(0.001)     # 程式停止時間
             # plt.clf() 
         else:
             plt.ioff()
