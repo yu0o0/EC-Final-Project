@@ -22,6 +22,7 @@ class Population:
         self.population=[]
         for i in range(populationSize):
             self.population.append(self.__class__.individualType())                                                                                                                                        
+        self.arrive_path=[]
 
     def __len__(self):
         return len(self.population)
@@ -234,11 +235,29 @@ class Population:
             plt.show()
         
     def sort(self):
+        newPop, deadPop=[],[]
+        for ind in self.population:
+            if ind.objectives["deadEnd"]:
+                deadPop.append(ind)
+            elif ind.objectives["isArrive"]:
+                deadPop.append(ind)
+                if ind.path not in self.arrive_path:
+                    self.arrive_path.append(ind.path)
+                    print(f'arrive path: {ind.path}')
+            else:
+                newPop.append(ind)
+        tempPop=newPop.copy()
+        for ind in tempPop:
+            for d_ind in deadPop:
+                if set(ind.path).issubset(set(d_ind.path)):
+                    newPop.remove(ind)
+                    break
+
         unique_paths = set()
         uniquePop = []
         repetitivePop = []
 
-        for ind in self.population:
+        for ind in newPop:
             path_set = set()
             for coordinate in ind.path:
                 path_set.add(coordinate)
@@ -255,6 +274,8 @@ class Population:
         repetitivePop.sort(
             key=lambda ind: (-ind.objectives["isArrive"], -ind.objectives["step"]))
         uniquePop.extend(repetitivePop)
+        uniquePop.extend(deadPop)
+        # uniquePop.extend(arrivePop)
         self.population = uniquePop.copy()
 
         # self.population.sort(key=lambda ind: (-ind.objectives["step"]))

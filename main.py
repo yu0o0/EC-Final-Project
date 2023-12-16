@@ -83,21 +83,22 @@ def printStats(pop,gen):
     # avgCost=0
     # costval,maxval=pop[0].objectives
     # mutRate=pop[0].mutRate
-    for ind in pop:
+    # for ind in pop:
         # avgDamage+=ind.objectives[1]
         # avgCost+=ind.objectives[0]
         # if ind.objectives[1] > maxval:
         #     costval,maxval=ind.objectives
         #     mutRate=ind.mutRate
         # print(f'{ind} {ind.objectives["isArrive"]} {ind.objectives["step"]}')
-        print(f'{ind.objectives["isArrive"]} {ind.objectives["step"]}')
+        # print(f'{ind.objectives["isArrive"]} {ind.objectives["step"]}')
 
     # print('Max Damage',maxval)
     # print('Most powerful Spell Cost',costval)
     # print('Avg Damage',avgDamage/len(pop))
     # print('Avg Cost',avgCost/len(pop))
     # print('MutRate',mutRate)
-    # print('')
+    # print(f'arrive_path: {len(pop.arrive_path)}')
+    
 
 #
 # Helper function that allows us to init all cfg-related class
@@ -121,7 +122,7 @@ def EV3(cfg):
     # 載入 YAML 檔案
     with open(cfg.map, "r") as yaml_file:
         maze_map = yaml.safe_load(yaml_file)
-    print(maze_map)
+    # print(maze_map)
     max_x = max(coord[1] for coord in maze_map.keys())
     max_y = max(coord[0] for coord in maze_map.keys())
 
@@ -151,7 +152,7 @@ def EV3(cfg):
     population.sort()
 
     #print initial pop stats    
-    printStats(population,0)
+    # printStats(population,0)
     Plot.plotPath(0, population, False)
 
     #evolution main loop
@@ -164,7 +165,7 @@ def EV3(cfg):
         offspring.binaryTournament()
         
         #perform crossover
-        # offspring.crossover()
+        offspring.crossover()
         
         #random mutation
         offspring.mutate()
@@ -183,7 +184,7 @@ def EV3(cfg):
         population.truncation(cfg.populationSize)
         
         #print population stats    
-        printStats(population,i+1)
+        # printStats(population,i+1)
         Plot.plotPath(i+1, population, False)
 
     Plot.plotPath(cfg.generationCount, population, True)
