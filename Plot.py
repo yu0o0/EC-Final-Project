@@ -16,11 +16,16 @@ class Plot:
         plt.title(f'generation: {generation}')
 
         if pop:
-            for i in range(len(pop)):
+            for ind in pop:
                 # 將路徑畫在迷宮上
                 # print(pop[i].path)
-                path_x = [x + 0.5 for x, y in pop[i].path]
-                path_y = [y + 0.5 for x, y in pop[i].path]
+                path_x = [x + 0.5 for x, y in ind.path]
+                path_y = [y + 0.5 for x, y in ind.path]
+
+                # if ind.group == "n":
+                #     handle, = plt.plot(path_y, path_x, marker='o', color='red', markersize=6)
+                # elif ind.group == "o":
+                #     handle, = plt.plot(path_y, path_x, marker='o', color='green', markersize=6)
                 handle, = plt.plot(path_y, path_x, marker='o', color='red', markersize=6)
                 cls.plot_handles.append(handle)
 

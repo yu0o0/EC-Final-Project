@@ -58,8 +58,10 @@ class ExploreMaze:
 
             if end_flag:
                 break
+
+        distanceToGoal = abs(visited[-1][0] - cls.goal[0])+abs(visited[-1][1] - cls.goal[1])
             
-        return {"isArrive": isArrive, "step": step}, visited
+        return {"isArrive": isArrive, "step": step, "distanceToGoal":distanceToGoal}, visited
         
     # @classmethod  
     # def ObjFuct(cls,state):

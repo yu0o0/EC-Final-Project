@@ -154,7 +154,6 @@ def EV3(cfg):
     printStats(population,0)
     Plot.plotPath(0, population, False)
 
-
     #evolution main loop
     for i in range(cfg.generationCount):
         #create initial offspring population by copying parent pop
@@ -165,7 +164,6 @@ def EV3(cfg):
         offspring.binaryTournament()
         
         #perform crossover
-        
         offspring.crossover()
         
         #random mutation
@@ -189,7 +187,7 @@ def EV3(cfg):
         printStats(population,i+1)
         Plot.plotPath(i+1, population, False)
 
-    plotPath(maze_map, cfg.generationCount, population, True)
+    Plot.plotPath(cfg.generationCount, population, True)
         
         
 #
