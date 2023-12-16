@@ -5,9 +5,7 @@
 
 import copy
 import math
-from operator import attrgetter
 from Individual import *
-# import matplotlib.pyplot as plt
 
 class Population:
     """
@@ -236,8 +234,34 @@ class Population:
             plt.show()
         
     def sort(self):
+        unique_paths = set()
+        uniquePop = []
+        repetitivePop = []
+
+        for ind in self.population:
+            path_set = set()
+            for coordinate in ind.path:
+                path_set.add(coordinate)
+            if path_set.issubset(unique_paths):
+                # 如果路徑已經在 unique_paths 中，表示重複，放到 duplicated_paths 中
+                repetitivePop.append(ind)
+            else:
+                # 否則，將路徑加入 unique_paths
+                unique_paths.update(path_set)
+                uniquePop.append(ind)
+
+        uniquePop.sort(
+            key=lambda ind: (-ind.objectives["isArrive"], -ind.objectives["step"]))
+        repetitivePop.sort(
+            key=lambda ind: (-ind.objectives["isArrive"], -ind.objectives["step"]))
+        uniquePop.extend(repetitivePop)
+        self.population = uniquePop.copy()
+
         # self.population.sort(key=lambda ind: (-ind.objectives["step"]))
-        self.population.sort(key=lambda ind: (-ind.objectives["isArrive"], -ind.objectives["step"]))
+        # self.population.sort(key=lambda ind: (-ind.objectives["isArrive"], -ind.objectives["step"]))
+        # self.population.sort(key=lambda ind: (ind.objectives["distanceToGoal"]))
+        # self.population.sort(key=lambda ind: (-ind.objectives["step"]))
+        # self.population.sort(key=lambda ind: (-ind.objectives["isArrive"], -ind.objectives["step"]))
                 
     def __str__(self):
         s=''

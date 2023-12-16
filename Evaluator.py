@@ -1,64 +1,61 @@
-
-import math
-import time
-
 #1-D lattice total energy function evaluator class
 #
-class MagicPower:
+class ExploreMaze:
     mazeMap=None
-    act = ['N', 'E', 'S', 'W']
+    start = (1, 1)
+    goal = None
+    directions = ['N', 'E', 'S', 'W']
         
     @classmethod  
     def ObjFuct(cls,state):
-        start = (10, 10)  
-        goal = (1, 1)   
+        position = cls.start
         step = 0
         isArrive = False
-        # visited = set()
-        visited = []
-        visited.append(start)
+
+        path = []
+        path.append(position)
         for action in state:   
             # 撞牆
-            if cls.mazeMap[start][action] == 0:
+            if cls.mazeMap[position][action] == 0:
                 break
             if action == 'N':
-                tempStart = (start[0]-1, start[1])   
+                tempPosition  = (position[0]-1, position[1])   
             elif action == 'S':
-                tempStart = (start[0]+1, start[1])   
+                tempPosition  = (position[0]+1, position[1])   
             elif action == 'W':
-                tempStart = (start[0], start[1]-1)   
+                tempPosition  = (position[0], position[1]-1)   
             elif action == 'E':
-                tempStart = (start[0], start[1]+1)   
+                tempPosition  = (position[0], position[1]+1)   
                 
             # 到達終點
-            if tempStart == goal:
+            if tempPosition  == cls.goal:
                 isArrive = True
-                visited.append(goal)
+                path.append(cls.goal)
                 break
             
             # 檢查有無回頭
-            if tempStart in visited:
-                if cls.act.index(action) == 3:
-                    action = cls.act[0]
+            if tempPosition  in path:
+                if cls.directions.index(action) == 3:
+                    action = cls.directions[0]
                 else:
-                    action = cls.act[cls.act.index(action)+1]
-                if cls.mazeMap[start][action] == 0:
+                    action = cls.directions[cls.directions.index(action)+1]
+                if cls.mazeMap[position][action] == 0:
                     break
                 if action == 'N':
-                    start = (start[0]-1, start[1])   
+                    position = (position[0]-1, position[1])   
                 elif action == 'S':
-                    start = (start[0]+1, start[1])   
+                    position = (position[0]+1, position[1])   
                 elif action == 'W':
-                    start = (start[0], start[1]-1)   
+                    position = (position[0], position[1]-1)   
                 elif action == 'E':
-                    start = (start[0], start[1]+1)
+                    position = (position[0], position[1]+1)
                 # break
             else:
-                start = tempStart
+                position = tempPosition 
             step += 1
-            visited.append(start)
+            path.append(position)
             
+        distanceToGoal = abs(path[-1][0] - cls.goal[0])+abs(path[-1][1] - cls.goal[1])
             
-        return {"isArrive": isArrive,"step": step}, visited
-        
+        return {"isArrive": isArrive, "step": step, "distanceToGoal":distanceToGoal}, path        
 
