@@ -19,7 +19,7 @@ class Individual:
     ObjFunc=None
 
     def __init__(self):
-        self.objectives, self.path=self.__class__.ObjFunc(self.state)
+        self.objectives, self.path, self.branch=self.__class__.ObjFunc(self.state)
         self.mutRate=self.uniprng.uniform(0.9,0.1) #use "normalized" sigma
         self.numObj=len(self.objectives)
             
@@ -29,7 +29,7 @@ class Individual:
         if self.mutRate > self.maxMutRate: self.mutRate=self.maxMutRate
             
     def evaluateObjectives(self):
-        if self.objectives == None: self.objectives, self.path=self.__class__.ObjFunc(self.state)
+        if self.objectives == None: self.objectives, self.path, self.branch=self.__class__.ObjFunc(self.state)
     
     def dominates(self,other):
         dominatesCount=0
@@ -121,8 +121,26 @@ class MagicianIndividual(Individual):
     def mutate(self):
         self.mutateMutRate() #update mutation rate
         
-        for i in range(self.nRounds):
-            if self.uniprng.random() < self.mutRate:
+        # if self.branch:
+        #     for i in range(self.branch[-1][0], self.nRounds):
+        #         if self.uniprng.random() < self.mutRate:
+        #             self.state[i]=self.uniprng.choice(['E', 'N', 'S', 'W'])
+        # else:
+        #     for i in range(self.nRounds):
+        #         if self.uniprng.random() < self.mutRate:
+        #             self.state[i]=self.uniprng.choice(['E', 'N', 'S', 'W'])
+
+        # 從走錯路那步開始突變
+        if self.uniprng.random() < self.mutRate:
+            for i in range(self.objectives['step'], self.nRounds):
+                self.state[i]=self.uniprng.choice(['E', 'N', 'S', 'W'])
+        elif self.branch:
+            # for i in range(self.branch[-1][0], self.nRounds):
+            for i in range(self.uniprng.choice(self.branch)[0], self.nRounds):
+                self.state[i]=self.uniprng.choice(['E', 'N', 'S', 'W'])
+
+        else:
+            for i in range(self.nRounds):
                 self.state[i]=self.uniprng.choice(['E', 'N', 'S', 'W'])
         
         self.objectives=None

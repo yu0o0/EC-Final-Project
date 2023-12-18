@@ -13,7 +13,7 @@ class Plot:
             handle.remove()
         cls.plot_handles = []
 
-        plt.title(f'generation: {generation}')
+        plt.title(f'generation: {generation}\nfound arrive path: {len(pop.arrive_path)}')
 
         if pop:
             for i in range(len(pop)):
@@ -21,8 +21,14 @@ class Plot:
                 # print(pop[i].path)
                 path_x = [x + 0.5 for x, y in pop[i].path]
                 path_y = [y + 0.5 for x, y in pop[i].path]
-                handle, = plt.plot(path_y, path_x, marker='o', color='red', markersize=6)
+                handle, = plt.plot(path_y, path_x, marker='o', color='red', markersize=5)
                 cls.plot_handles.append(handle)
+            
+        for path in pop.new_arrive_path:
+            path_x = [x + 0.5 for x, y in path]
+            path_y = [y + 0.5 for x, y in path]
+            plt.plot(path_y, path_x, marker='o', color='blue', markersize=10)
+            pop.new_arrive_path.remove(path)
 
         # 顯示繪圖
         if not stay:

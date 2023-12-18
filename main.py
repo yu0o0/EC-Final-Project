@@ -165,7 +165,7 @@ def EV3(cfg):
         offspring.binaryTournament()
         
         #perform crossover
-        offspring.crossover()
+        # offspring.crossover()
         
         #random mutation
         offspring.mutate()
