@@ -13,7 +13,7 @@ class Plot:
             handle.remove()
         cls.plot_handles = []
 
-        plt.title(f'generation: {generation}\nfound arrive path: {len(pop.arrive_path)}')
+        plt.title(f'generation: {generation}\nfound arrivable path: {len(pop.arrive_path)}')
 
         if pop:
             for i in range(len(pop)):

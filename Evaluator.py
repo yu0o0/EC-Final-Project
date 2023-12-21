@@ -18,7 +18,9 @@ class ExploreMaze:
         path.append(position)
         for action in state:
             # 分支路口
-            if len([direction for direction, isRoad in cls.mazeMap[position].items() if isRoad]) >= 3:
+            availabel_direction = [direction for direction, isRoad in cls.mazeMap[position].items() if isRoad]
+            if len(availabel_direction) >= 3 \
+                or (position == cls.start and len(availabel_direction)>=2):
                 branch.append([step,position])
 
             # 撞牆
@@ -76,7 +78,7 @@ class ExploreMaze:
         distanceToGoal = abs(path[-1][0] - cls.goal[0]) + \
             abs(path[-1][1] - cls.goal[1])
 
-        return {"isArrive": isArrive, "step": step, "distanceToGoal": distanceToGoal, "deadEnd": deadEnd}, path, branch
+        return {"isArrive": isArrive, "step": step, "distanceToGoal": distanceToGoal, "deadEnd": deadEnd}, path, {"branch":branch, "step":step}
 
     def walk(position, action):
         if action == 'N':

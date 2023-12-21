@@ -24,6 +24,7 @@ class Population:
             self.population.append(self.__class__.individualType())                                                                                                                                        
         self.arrive_path=[]
         self.new_arrive_path=[]
+        self.arrivePop = []
 
     def __len__(self):
         return len(self.population)
@@ -45,19 +46,25 @@ class Population:
             individual.mutate()
             
     def crossover(self):
-        indexList1=list(range(len(self)))
-        indexList2=list(range(len(self)))
-        self.uniprng.shuffle(indexList1)
-        self.uniprng.shuffle(indexList2)
+        # indexList1=list(range(len(self)))
+        # indexList2=list(range(len(self)))
+        # self.uniprng.shuffle(indexList1)
+        # self.uniprng.shuffle(indexList2)
             
-        if self.crossoverFraction == 1.0:             
-            for index1,index2 in zip(indexList1,indexList2):
-                self[index1].crossover(self[index2])
-        else:
-            for index1,index2 in zip(indexList1,indexList2):
-                rn=self.uniprng.random()
+        # if self.crossoverFraction == 1.0:             
+        #     for index1,index2 in zip(indexList1,indexList2):
+        #         self[index1].crossover(self[index2])
+        # else:
+        #     for index1,index2 in zip(indexList1,indexList2):
+        #         rn=self.uniprng.random()
+        #         if rn < self.crossoverFraction:
+        #             self[index1].crossover(self[index2])  
+        
+        if self.arrivePop:
+            for ind in self.population:
+                rn=self.__class__.uniprng.random()
                 if rn < self.crossoverFraction:
-                    self[index1].crossover(self[index2])        
+                    ind.crossover(self.__class__.uniprng.choice(self.arrivePop))              
 
     def combinePops(self,otherPop):
         self.population.extend(otherPop.population)
@@ -194,47 +201,6 @@ class Population:
         self.computeFrontRanks()
         self.computeCrowding()
     
-    def generatePlots(self,title=None,showPlot=True):
-        #first, make sure state & objective space have at least 2 dimensions, pop size at least 1
-        if len(self.population) < 1:
-            raise Exception('showPlots error: Population size must be >= 1 !')
-        if (len(self.population[0].state) < 2) or (len(self.population[0].objectives) < 2):
-            raise Exception('showPlots error: State & objective spaces must have at least 2 dimensions!')
-
-        #if front ranking has not been computed, then skip
-        if self.population[0].frontRank is None: plotOrder=[111,000]
-        else: plotOrder=[121,122]
-
-        plt.subplots_adjust(wspace=0.75) #increase spacing between plots a bit
-        plt.subplot(plotOrder[0])
-        x=[ind.objectives[0] for ind in self.population]
-        y=[ind.objectives[1] for ind in self.population]
-        plt.scatter(x,y)
-        plt.xlabel('Spell Cost')
-        plt.ylabel('Total Damage')
-        plt.title('Objective space of'+ title)
-
-        if self.population[0].frontRank is not None:
-            plt.subplot(plotOrder[1])
-            maxRank=0
-            for ind in self.population:
-                if ind.frontRank > maxRank: maxRank=ind.frontRank
-            
-            rank=0
-            while rank<= maxRank:
-                xy=[ind.objectives for ind in self.population if ind.frontRank == rank]
-                xy.sort(key=lambda obj: obj[0]) #need to sort in 1st dim to make connected line plots look sensible!
-                x=[obj[0] for obj in xy]
-                y=[obj[1] for obj in xy]
-                plt.plot(x,y,marker='o',label=str(rank))
-                rank+=1
-            plt.xlabel('Mana Cost')
-            plt.ylabel('Total Damage')
-            plt.title('Ranked Fronts of' + title)
-
-        if showPlot:
-            plt.show()
-        
     def sort(self):
         newPop, deadPop=[],[]
         for ind in self.population:
@@ -245,6 +211,7 @@ class Population:
                 if ind.path not in self.arrive_path:
                     self.arrive_path.append(ind.path)
                     self.new_arrive_path.append(ind.path)
+                    self.arrivePop.append(copy.deepcopy(ind))
                     print(f'arrive path: {ind.path}')
             else:
                 newPop.append(ind)
@@ -272,11 +239,11 @@ class Population:
                 uniquePop.append(ind)
 
         uniquePop.sort(
-            key=lambda ind: (-ind.objectives["isArrive"], -ind.objectives["step"]))
+            key=lambda ind: (-ind.objectives["step"]))
         repetitivePop.sort(
-            key=lambda ind: (-ind.objectives["isArrive"], -ind.objectives["step"]))
+            key=lambda ind: (-ind.objectives["step"]))
         deadPop.sort(
-            key=lambda ind: (-ind.objectives["isArrive"], -ind.objectives["step"]))
+            key=lambda ind: (-ind.objectives["step"]))
         uniquePop.extend(repetitivePop)
         uniquePop.extend(deadPop)
         # uniquePop.extend(arrivePop)

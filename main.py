@@ -1,17 +1,3 @@
-#
-# Magic_World.py: 
-#   An elitist (mu+mu) generational-with-overlap EA
-#   Min-max MO problem with Pareto front
-#
-#
-# To run: python MagicWorld.py --input magic_example.cfg
-#         python MagicWorld.py --input my_params.cfg
-#
-#   - Supports self-adaptive mutation
-#   - Uses MO-binary tournament selection for mating pool
-#   - Uses MO-elitist truncation selection for survivors
-#
-
 import optparse
 import sys
 import yaml
@@ -26,9 +12,9 @@ from Plot import *
 
 
 #MagicWorld Config class 
-class MagicWorld:
+class Maze:
     """
-    MagicWorld configuration class
+    Maze configuration class
     """
     # class variables
     sectionName='maze'
@@ -46,7 +32,6 @@ class MagicWorld:
      
     #constructor
     def __init__(self, inFileName):
-        #read YAML config and get MagicWorld section
         infile=open(inFileName,'r')
         ymlcfg=yaml.safe_load(infile)
         infile.close()
@@ -105,14 +90,14 @@ def printStats(pop,gen):
 #  variables on our Pool worker processes
 #
 def initClassVars(cfg):
-    MagicianIndividual.ObjFunc=ExploreMaze.ObjFuct
-    MagicianIndividual.nRounds=cfg.rounds
-    MagicianIndividual.nSpells=cfg.magicTypes
-    MagicianIndividual.learningRate=1.0/math.sqrt(cfg.rounds)
+    MazeIndividual.ObjFunc=ExploreMaze.ObjFuct
+    MazeIndividual.nRounds=cfg.rounds
+    MazeIndividual.nSpells=cfg.magicTypes
+    MazeIndividual.learningRate=1.0/math.sqrt(cfg.rounds)
 
     if len(cfg.selfDamage) != cfg.magicTypes: raise Exception('Inconsistent selfDamage vector length')
     if len(cfg.EnhanceDamage) != cfg.magicTypes: raise Exception('Inconsistent EnhanceDamage matrix size')
-    Population.individualType=MagicianIndividual
+    Population.individualType=MazeIndividual
 
 #EV3_MO:
 #            
@@ -165,7 +150,7 @@ def EV3(cfg):
         offspring.binaryTournament()
         
         #perform crossover
-        # offspring.crossover()
+        offspring.crossover()
         
         #random mutation
         offspring.mutate()
@@ -212,7 +197,7 @@ def main(argv=None):
             raise Exception("Must specify input file name using -i or --input option.")
         
         #Get MagicWorld config params
-        cfg=MagicWorld(options.inputFileName)
+        cfg=Maze(options.inputFileName)
         
         #print config params
                     
@@ -224,7 +209,7 @@ def main(argv=None):
         print('End time  : {}'.format(time.asctime()))
         
         if not options.quietMode:                    
-            print('MagicWorld Completed!')    
+            print('Maze Completed!')    
     
     except Exception as info:
         if 'options' in vars() and options.debugMode:
